@@ -90,7 +90,7 @@ describe('测试计算订单优惠前后的总价', () => {
 
 describe('pos', () => {
 
-  it('should print text', () => {
+  it('should print text收据内容', () => {
 
     const tags = [
       'ITEM000001',

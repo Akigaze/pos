@@ -1,7 +1,7 @@
 'use strict';
 
 function printReceipt(cart) {
-  console.log('hello');
+  //console.log('hello');
   //格式化条形码的字符串集合,转化为{barcode：，count：}
   const cartBarcodes=formatCartBarcode(cart);
   console.info(JSON.stringify(cartBarcodes));
@@ -17,9 +17,11 @@ function printReceipt(cart) {
   //计算订单优惠前后的总价  3'
   let pay=getPay(receiptItems);
   //计算优惠节省的金额  1'
-  //let save=pay.before-pay.after;
-  //打印收据  5'
-  //print(pay,save,items);
+  let save=pay.before-pay.after;
+  //生成收据内容  5'
+  const receipt=generateReceiptContent(pay,save,receiptItems);
+  //打印收据
+  console.log(receipt);
 }
 //格式化条形码的字符串集合,转化为{barcode：，count：}
 function formatCartBarcode(cart){
@@ -74,14 +76,6 @@ function getReceiptItemMsg(items,goods){
   console.info(items);
   return items;
 }
-//计算每种商品的总价
-/*
-function getTotalPrice(items) {
-  for (let item of items) {
-    item.totalPrice=item.count*item.price;
-  }
-}
-*/
 //计算每种商品优惠后的总价
 function discount(items) {
   for (let item of items) {
@@ -122,7 +116,7 @@ function getPay(items) {
   return {before:bef,after:aft};
 }
 //打印收据
-function print(pay,save,myGoods) {
+function generateReceiptContent(pay,save,myGoods) {
   let receipt="***<没钱赚商店>收据***\n";
   for (let buy of myGoods){
     receipt+="名称："+buy.name+"，数量："+buy.count+buy.unit+"，单价："+(buy.price).toFixed(2)+"(元)，小计："+(buy.discount).toFixed(2)+"(元)\n";
@@ -131,5 +125,6 @@ function print(pay,save,myGoods) {
   receipt+="总计："+(pay.after).toFixed(2)+"(元)\n";
   receipt+="节省："+save.toFixed(2)+"(元)\n";
   receipt+="**********************";
-  console.log(receipt);
+  console.info(receipt);
+  return receipt;
 }
