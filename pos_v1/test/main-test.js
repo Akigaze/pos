@@ -61,6 +61,21 @@ describe('测试丰富清单中每一种商品的信息的函数', () => {
   });
 });
 
+describe('测试计算每种商品优惠后的小计', () => {
+  it('discount函数先判断商品是否满足优惠条件，再计算优惠后的总价', () => {
+    const receiptItems = [
+      {"barcode":"ITEM000001","count":5,"name":"雪碧","unit":"瓶","price":3},
+      {"barcode":"ITEM000003","count":2.5,"name":"荔枝","unit":"斤","price":15},
+      {"barcode":"ITEM000005","count":3,"name":"方便面","unit":"袋","price":4.5}
+    ];
+    const receipItems=discount(receiptItems);
+    const test_index=2;
+    const expect_discount = '9';
+    expect(expect_discount).toBe(JSON.stringify(receipItems[test_index].discount));
+  });
+});
+
+
 describe('pos', () => {
 
   it('should print text', () => {

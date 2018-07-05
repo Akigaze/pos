@@ -12,10 +12,8 @@ function printReceipt(cart) {
   const allGoods=loadAllItems();
   //获得购买的商品的信息  4'
   getReceiptItemMsg(receiptItems,allGoods);
-  //计算每种商品的总价  1'
-  //getTotalPrice(items);
   //计算每种商品优惠后的总价  5'
-  //discount(items,2,1);
+  discount(receiptItems);
   //计算订单优惠前后的总价  3'
   //let pay=getPay(items);
   //计算优惠节省的金额  1'
@@ -77,26 +75,34 @@ function getReceiptItemMsg(items,goods){
   return items;
 }
 //计算每种商品的总价
+/*
 function getTotalPrice(items) {
   for (let item of items) {
     item.totalPrice=item.count*item.price;
   }
 }
+*/
 //计算每种商品优惠后的总价
 function discount(items) {
   for (let item of items) {
-    const promotion=loadPromotions();
-    if (isPromote(promotion,item)) {
-      item.discount=(item.count-1)*item.price;
-    }else {
-      item.discount=item.totalPrice;
+    const promotions=loadPromotions();
+    for (let promotion of promotions) {
+      if(promotion.type!=="BUY_TWO_GET_ONE_FREE"){
+        continue;
+      }
+      item.discount=item.count*item.price;
+      if (isPromote(promotion,item)) {
+        item.discount=(item.count-Math.floor(item.count/3))*item.price;
+      }
     }
   }
+  console.info(JSON.stringify(items));
+  return items;
 }
 //判断商品是否参与优惠活动
 function isPromote(promotion,item){
   let promote=false;
-  for (let barcode of promotion[0].barcodes) {
+  for (let barcode of promotion.barcodes) {
     if (item.barcode===barcode&&item.count>=3) {
       promote=true;
       break;
