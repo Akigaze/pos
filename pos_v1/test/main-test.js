@@ -75,6 +75,18 @@ describe('测试计算每种商品优惠后的小计', () => {
   });
 });
 
+describe('测试计算订单优惠前后的总价', () => {
+  it('getPay函数输出优惠前和优惠后的订单总价', () => {
+    const receiptItems = [
+      {"barcode":"ITEM000001","count":5,"name":"雪碧","unit":"瓶","price":3,"discount":12},
+      {"barcode":"ITEM000003","count":2.5,"name":"荔枝","unit":"斤","price":15,"discount":37.5},
+      {"barcode":"ITEM000005","count":3,"name":"方便面","unit":"袋","price":4.5,"discount":9}
+    ];
+    const pay=getPay(receiptItems);
+    const expect_result={before: 66, after: 58.5};
+    expect(JSON.stringify(expect_result)).toBe(JSON.stringify(pay));
+  });
+});
 
 describe('pos', () => {
 

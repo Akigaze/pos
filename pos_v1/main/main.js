@@ -15,7 +15,7 @@ function printReceipt(cart) {
   //计算每种商品优惠后的总价  5'
   discount(receiptItems);
   //计算订单优惠前后的总价  3'
-  //let pay=getPay(items);
+  let pay=getPay(receiptItems);
   //计算优惠节省的金额  1'
   //let save=pay.before-pay.after;
   //打印收据  5'
@@ -115,9 +115,10 @@ function getPay(items) {
   let aft=0;
   let bef=0;
   for(let item of items){
-    bef+=item.totalPrice;
+    bef+=item.count*item.price;
     aft+=item.discount;
   }
+  console.info({before:bef,after:aft});
   return {before:bef,after:aft};
 }
 //打印收据
