@@ -8,11 +8,10 @@ function printReceipt(cart) {
   //统计商品数量  15'
   let receiptItems=countMyCart(cartBarcodes);
   console.info(receiptItems);
-
   //获取所有商品的信息  1'
-  //const goods=loadAllItems();
+  const allGoods=loadAllItems();
   //获得购买的商品的信息  4'
-  //getItemsMsg(items,goods);
+  getReceiptItemMsg(receiptItems,allGoods);
   //计算每种商品的总价  1'
   //getTotalPrice(items);
   //计算每种商品优惠后的总价  5'
@@ -63,7 +62,7 @@ function countMyCart(cartBarcodes){
   return receiptItems;
 }
 //获得购买的商品的信息  4'
-function getItemsMsg(items,goods){
+function getReceiptItemMsg(items,goods){
   for (let item of items) {
     for (let good of goods) {
       if (item.barcode===good.barcode) {
@@ -74,6 +73,7 @@ function getItemsMsg(items,goods){
       }
     }
   }
+  console.info(items);
   return items;
 }
 //计算每种商品的总价

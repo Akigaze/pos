@@ -47,6 +47,19 @@ describe('测试统计每种条形码的数量', () => {
   });
 });
 
+describe('测试丰富清单中每一种商品的信息的函数', () => {
+  it('getReceiptItemMsg函数根据所有商品的信息，完善清单中每一个商品的基本信息', () => {
+    const barcodeObjItems = [
+      {barcode: "ITEM000001", count: 5},
+      {barcode: "ITEM000003", count: 2.5},
+      {barcode: "ITEM000005", count: 3}
+    ];
+    const receipItems=getReceiptItemMsg(barcodeObjItems,loadAllItems());
+    const test_index=2;
+    const expect_receipt_item = {barcode: "ITEM000005", count: 3, name: "方便面", unit: "袋", price: 4.5};
+    expect(JSON.stringify(expect_receipt_item)).toBe(JSON.stringify(receipItems[test_index]));
+  });
+});
 
 describe('pos', () => {
 
