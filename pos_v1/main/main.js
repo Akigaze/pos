@@ -85,13 +85,26 @@ function getTotalPrice(items) {
   }
 }
 //计算每种商品优惠后的总价
-function discount(items,man,zeng) {
+function discount(items) {
   for (let item of items) {
-    item.discount=item.totalPrice;
-    if (item.count>=man+zeng) {
-      item.discount=(item.count-zeng)*item.price;
+    const promotion=loadPromotions();
+    if (isPromote(promotion,item)) {
+      item.discount=(item.count-1)*item.price;
+    }else {
+      item.discount=item.totalPrice;
     }
   }
+}
+//判断商品是否参与优惠活动
+function isPromote(promotion,item){
+  let promote=false;
+  for (let barcode of promotion[0].barcodes) {
+    if (item.barcode===barcode&&item.count>=3) {
+      promote=true;
+      break;
+    }
+  }
+  return promote;
 }
 //计算订单优惠前后的总价
 function getPay(items) {
