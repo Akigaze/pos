@@ -4,8 +4,11 @@ function printReceipt(cart) {
   console.log('hello');
   //格式化条形码的字符串集合,转化为{barcode：，count：}
   const cartBarcodes=formatCartBarcode(cart);
+  console.info(JSON.stringify(cartBarcodes));
   //统计商品数量  15'
-  //let items=countMyCart(cart);
+  let receiptItems=countMyCart(cartBarcodes);
+  console.info(receiptItems);
+
   //获取所有商品的信息  1'
   //const goods=loadAllItems();
   //获得购买的商品的信息  4'
@@ -31,7 +34,6 @@ function formatCartBarcode(cart){
     }
     barcodes.push(barcodeItem);
   }
-  //console.info(barcodes);
   return barcodes;
 }
 //切割含有“-”的条形码，获得具体的条形码和数量
@@ -40,46 +42,25 @@ function spiltBarcode(code) {
   let index=code.indexOf('-');
   item.barcode=code.slice(0,index);
   item.count=parseFloat(code.slice(index+1));
-  console.info(item);
   return item;
 }
 //统计商品数量
-function countMyCart(cart){
-  const items=[];
-  let diffIndex=cart.length;
-  //是否已存在与当前字符不同的字符，默认为false,即默认所有字符都一样
-  let diff=false;
-  for (let i = 0; i < cart.length; i++) {
-    let item={barcode:"",count:0};
-    if (cart[i].indexOf('-')!==-1) {
-      item=spiltBarcode(cart[i]);
-    }else {
-      item.barcode=cart[i];
-      item.count=1;
-    }
-    for (let j = i+1; j < cart.length; j++) {
-      if (cart[j].indexOf('-')!==-1) {
-        let temp=spiltBarcode(cart[j]);
-        if (item.barcode===temp.barcode) {
-          item.count+=temp.count;
-          continue;
-        }
-      }
-      if (cart[j]===item.barcode) {
-        item.count++;
-        continue;
-      }
-      if (!diff) {
-        diff=true;
-        diffIndex=j;
+function countMyCart(cartBarcodes){
+  const receiptItems=[];
+  for (let barcodeObj of cartBarcodes) {
+    let tempBarcode=null;
+    for (let receiptItem of receiptItems) {
+      if (receiptItem.barcode===barcodeObj.barcode) {
+        receiptItem.count+=barcodeObj.count;
+        tempBarcode=receiptItem;
+        break;
       }
     }
-    i=diffIndex-1;
-    items.push(item);
-    diff=false;
-    diffIndex=cart.length;
+    if (tempBarcode===null) {
+      receiptItems.push(barcodeObj);
+    }
   }
-  return items;
+  return receiptItems;
 }
 //获得购买的商品的信息  4'
 function getItemsMsg(items,goods){
