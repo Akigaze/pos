@@ -70,15 +70,23 @@ describe('测试丰富清单中每一种商品的信息的函数', () => {
 
 describe('测试计算每种商品优惠后的小计', () => {
   it('discount函数先判断商品是否满足优惠条件，再计算优惠后的总价', () => {
-    const receiptItems = [
-      {"barcode":"ITEM000001","count":5,"name":"雪碧","unit":"瓶","price":3},
-      {"barcode":"ITEM000003","count":2.5,"name":"荔枝","unit":"斤","price":15},
-      {"barcode":"ITEM000005","count":3,"name":"方便面","unit":"袋","price":4.5}
+    const tags = [
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000003-2.5',
+      'ITEM000005',
+      'ITEM000005-2',
     ];
-    const receipt=discount(receiptItems);
+    const barcodeObjList=formatCartBarcodeList(tags);
+    const receiptItems=countBarcodeNum(barcodeObjList);
+    getReceiptItemMsg(receiptItems);
+    const receipt=calSubtotal(receiptItems);
     const test_index=2;
-    const expect_discount = '9';
-    expect(expect_discount).toBe(JSON.stringify(receipt.items[test_index].discount));
+    const expect_subtotal = '9';
+    expect(JSON.stringify(receipt.items[test_index].subtotal)).toBe(expect_subtotal);
   });
 });
 
