@@ -13,9 +13,9 @@ function printReceipt(cart) {
   //获得购买的商品的信息  4'
   getReceiptItemMsg(receiptItems,allGoods);
   //计算每种商品优惠后的小计  5'
-  discount(receiptItems);
-  //计算订单优惠前后的总价  3'
-  let pay=getPay(receiptItems);
+  const receipt=discount(receiptItems);
+  //计算订单总价和节省金额  3'
+  calTotalAndSaved(receipt);
   //计算优惠节省的金额  1'
   let save=pay.before-pay.after;
   //生成收据内容  5'
@@ -105,16 +105,17 @@ function isPromote(promotion,item){
   }
   return promote;
 }
-//计算订单优惠前后的总价
-function getPay(items) {
-  let aft=0;
-  let bef=0;
-  for(let item of items){
-    bef+=item.count*item.price;
-    aft+=item.discount;
+//计算订单总价和节省金额
+function calTotalAndSaved(receipt) {
+  let after=0;
+  let before=0;
+  for(let item of receipt.items){
+    before+=item.count*item.price;
+    after+=item.discount;
   }
-  console.info({before:bef,after:aft});
-  return {before:bef,after:aft};
+  receipt.total=after;
+  receipt.saved=before-after;
+  console.info({saved:before-after,after});
 }
 //打印收据
 function generateReceiptContent(pay,save,myGoods) {
