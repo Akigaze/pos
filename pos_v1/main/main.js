@@ -1,15 +1,12 @@
 'use strict';
 
 function printReceipt(cart) {
-  //console.log('hello');
   //格式化条形码的字符串集合,转化为{barcode：，count：}
   const barcodeObjList=formatCartBarcodeList(cart);
-  console.info(JSON.stringify(barcodeObjList));
   //统计商品数量  15'
   let receiptItems=countBarcodeNum(barcodeObjList);
-  console.info(receiptItems);
   //获得购买的商品的信息  4'
-  getReceiptItemMsg(receiptItems,allGoods);
+  getReceiptItemMsg(receiptItems);
   //计算每种商品优惠后的小计，并生成收据对象
   const receipt=calSubtotal(receiptItems);
   //计算订单总价和节省金额  3'
@@ -52,8 +49,8 @@ function countBarcodeNum(barcodeObjList){
     else
       receiptItems.push(barcodeObj);
   }
-  console.info("--------------------\n");
-  console.info(receiptItems);
+  //console.info("--------------------\n");
+  //console.info(receiptItems);
   return receiptItems;
 }
 //判断清单商品列表中是否已经存在某个条形码
@@ -88,8 +85,7 @@ function calSubtotal(items) {
       item.subtotal=(item.count-Math.floor(item.count/3))*item.price;
     }
   }
-  const receipt={items}
-  //console.info(JSON.stringify(receipt.items));
+  const receipt={items};
   return receipt;
 }
 //判断商品是否参与优惠活动
@@ -114,22 +110,20 @@ function calTotalAndSaved(receipt) {
   let before=0;
   for(let item of receipt.items){
     before+=item.count*item.price;
-    after+=item.discount;
+    after+=item.subtotal;
   }
   receipt.total=after;
   receipt.saved=before-after;
-  console.info({saved:before-after,after});
 }
 //生成收据内容字符串
 function generateReceiptString(receipt) {
   let receiptString="***<没钱赚商店>收据***\n";
   for (let item of receipt.items){
-    receiptString+="名称："+item.name+"，数量："+item.count+item.unit+"，单价："+(item.price).toFixed(2)+"(元)，小计："+(item.discount).toFixed(2)+"(元)\n";
+    receiptString+="名称："+item.name+"，数量："+item.count+item.unit+"，单价："+(item.price).toFixed(2)+"(元)，小计："+(item.subtotal).toFixed(2)+"(元)\n";
   }
   receiptString+="----------------------\n";
   receiptString+="总计："+(receipt.total).toFixed(2)+"(元)\n";
   receiptString+="节省："+(receipt.saved).toFixed(2)+"(元)\n";
   receiptString+="**********************";
-  console.info(receiptString);
   return receiptString;
 }

@@ -69,7 +69,7 @@ describe('测试丰富清单中每一种商品的信息的函数', () => {
 });
 
 describe('测试计算每种商品优惠后的小计', () => {
-  it('discount函数先判断商品是否满足优惠条件，再计算优惠后的总价', () => {
+  it('calTotalAndSaved函数先判断商品是否满足优惠条件，再计算优惠后的小计', () => {
     const tags = [
       'ITEM000001',
       'ITEM000001',
@@ -91,13 +91,21 @@ describe('测试计算每种商品优惠后的小计', () => {
 });
 
 describe('测试计算订单总价和节省金额', () => {
-  it('calTotalAndSaved函数为receipt对象添加total属性和saved属性', () => {
-    const receiptItems = [
-      {"barcode":"ITEM000001","count":5,"name":"雪碧","unit":"瓶","price":3},
-      {"barcode":"ITEM000003","count":2.5,"name":"荔枝","unit":"斤","price":15},
-      {"barcode":"ITEM000005","count":3,"name":"方便面","unit":"袋","price":4.5}
+  it('discount函数先判断商品是否满足优惠条件，再计算优惠后的总价', () => {
+    const tags = [
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000003-2.5',
+      'ITEM000005',
+      'ITEM000005-2',
     ];
-    const receipt=discount(receiptItems);
+    const barcodeObjList=formatCartBarcodeList(tags);
+    const receiptItems=countBarcodeNum(barcodeObjList);
+    getReceiptItemMsg(receiptItems);
+    const receipt=calSubtotal(receiptItems);
     calTotalAndSaved(receipt);
     const expect_tatal= 58.50;
     const expect_saved= 7.50;
