@@ -22,16 +22,21 @@ function printReceipt(cart) {
   console.log(receiptString);
 }
 //格式化条形码的字符串集合,转化为{barcode：，count：}
-function formatCartBarcode(cart){
-  const barcodes=[];
-  for (let item of cart) {
-    let barcodeItem={barcode:item,count:1};
-    if (item.indexOf('-')!==-1) {
-      barcodeItem=spiltBarcode(item)
-    }
-    barcodes.push(barcodeItem);
+function formatCartBarcode(barcodeList){
+  const barcodeObjList=[];
+  for (let barcode of barcodeList) {
+    barcodes.push(formatBarcode(barcode));
   }
   return barcodes;
+}
+//对一个购物车中的条形码进行格式化为对象
+function formatBarcode(code) {
+  let barcodeObj={barcode:code,count:1};
+  //如果存在“-”，则需要切割
+  if (code.indexOf('-')!==-1) {
+    barcodeObj=spiltBarcode(item)
+  }
+  return barcodeObj;
 }
 //切割含有“-”的条形码，获得具体的条形码和数量
 function spiltBarcode(code) {
