@@ -35,11 +35,10 @@ function formatCartBarcode(cart){
 }
 //切割含有“-”的条形码，获得具体的条形码和数量
 function spiltBarcode(code) {
-  let item={barcode:"",count:0};
   let index=code.indexOf('-');
-  item.barcode=code.slice(0,index);
-  item.count=parseFloat(code.slice(index+1));
-  return item;
+  let barcode=code.slice(0,index);
+  let count=parseFloat(code.slice(index+1));
+  return {barcode,count};
 }
 //统计商品数量
 function countMyCart(cartBarcodes){
