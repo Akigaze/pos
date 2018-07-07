@@ -8,8 +8,6 @@ function printReceipt(cart) {
   //统计商品数量  15'
   let receiptItems=countBarcodeNum(barcodeObjList);
   console.info(receiptItems);
-  //获取所有商品的信息  1'
-  const allGoods=loadAllItems();
   //获得购买的商品的信息  4'
   getReceiptItemMsg(receiptItems,allGoods);
   //计算每种商品优惠后的小计  5'
@@ -48,37 +46,40 @@ function spiltBarcode(code) {
 function countBarcodeNum(barcodeObjList){
   const receiptItems=[];
   for (let barcodeObj of barcodeObjList) {
-    let item=findItemByBarcode(barcodeObj,receiptItems)
+    let item=findItemByBarcode(barcodeObj,receiptItems,obj=>obj.barcode)
     if(item!==null)
       item.count+=barcodeObj.count;
     else
       receiptItems.push(barcodeObj);
   }
+  console.info("--------------------\n");
+  console.info(receiptItems);
   return receiptItems;
 }
 //判断清单商品列表中是否已经存在某个条形码
-function findItemByBarcode(barcodeObj,receiptItems){
+function findItemByBarcode(barcodeObj,receiptItems,getAttr){
   for (let item of receiptItems) {
-    if (barcodeObj.barcode===item.barcode)
+    if (getAttr(barcodeObj)===getAttr(item))
+      //alert(getAttr(barcodeObj));
       return item;
   }
   return null;
 }
 //获得购买的商品的信息  4'
-function getReceiptItemMsg(items,goods){
+function getReceiptItemMsg(items){
+  const allGoods=loadAllItems();
   for (let item of items) {
-    for (let good of goods) {
-      if (item.barcode===good.barcode) {
-        item.name=good.name;
-        item.unit=good.unit;
-        item.price=good.price;
-        break;
-      }
+    let good=findItemByBarcode(item,allGoods,obj=>obj.barcode)
+    if (good!==null) {
+      item.name=good.name;
+      item.unit=good.unit;
+      item.price=good.price;
     }
   }
   console.info(items);
-  return items;
 }
+
+
 //计算每种商品优惠后的总价
 function discount(items) {
   for (let item of items) {
