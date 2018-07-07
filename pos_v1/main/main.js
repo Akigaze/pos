@@ -12,7 +12,7 @@ function printReceipt(cart) {
   const allGoods=loadAllItems();
   //获得购买的商品的信息  4'
   getReceiptItemMsg(receiptItems,allGoods);
-  //计算每种商品优惠后的总价  5'
+  //计算每种商品优惠后的小计  5'
   discount(receiptItems);
   //计算订单优惠前后的总价  3'
   let pay=getPay(receiptItems);
@@ -90,8 +90,9 @@ function discount(items) {
       }
     }
   }
-  console.info(JSON.stringify(items));
-  return items;
+  const receipt={items}
+  console.info(JSON.stringify(receipt.items));
+  return receipt;
 }
 //判断商品是否参与优惠活动
 function isPromote(promotion,item){
