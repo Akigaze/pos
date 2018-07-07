@@ -8,7 +8,7 @@ describe('测试条形码集合的格式化', () => {
     expect(exceptObj).toBe(JSON.stringify(barcodeObj));
   });
 
-  it('formatCartBarcode函数进行格式化后的条形码要满足{barcode：，count：}的形式', () => {
+  it('formatCartBarcodeList函数进行格式化后的条形码要满足{barcode：，count：}的形式', () => {
     const tags = [
       'ITEM000001',
       'ITEM000001',
@@ -19,7 +19,7 @@ describe('测试条形码集合的格式化', () => {
       'ITEM000005',
       'ITEM000005-2',
     ];
-    const barcodes=formatCartBarcode(tags);
+    const barcodes=formatCartBarcodeList(tags);
     const test_index=5;
     const expect_barcode = "ITEM000003";
     const expect_count = 2.5;
@@ -29,7 +29,7 @@ describe('测试条形码集合的格式化', () => {
 });
 
 describe('测试统计每种条形码的数量', () => {
-  it('countMyCart函数统计每一种条形码的数量，并封装成对象集合', () => {
+  it('countBarcodeNum函数统计每一种条形码的数量，并封装成对象集合', () => {
     const barcodeObjItems = [
       {barcode:"ITEM000001",count:1},
       {barcode:"ITEM000001",count:1},
@@ -40,7 +40,7 @@ describe('测试统计每种条形码的数量', () => {
       {barcode:"ITEM000005",count:1},
       {barcode:"ITEM000005",count:2}
     ];
-    const barcodeItems=countMyCart(barcodeObjItems);
+    const barcodeItems=countBarcodeNum(barcodeObjItems);
     const test_index=2;
     const expect_barcode = {barcode: "ITEM000005", count: 3};
     expect(JSON.stringify(expect_barcode)).toBe(JSON.stringify(barcodeItems[test_index]));
